@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"gimnasio-app/config"
+	"gimnasio-app/controllers"
 
 	"github.com/gin-gonic/gin"
 )
@@ -44,6 +45,33 @@ func main() {
 		}
 		c.Next()
 	})
+
+	// Rutas públicas
+	r.POST("/login", controllers.Login)
+	r.POST("/register", controllers.Register)
+
+	// Rutas de actividades (públicas)
+	r.GET("/actividades", controllers.GetActivities)
+	r.GET("/actividades/:id", controllers.GetActivityByID)
+
+	// Rutas protegidas (requieren autenticación)
+	authorized := r.Group("/")
+	authorized.Use( /* middleware de autenticación */ )
+	{
+		// Rutas de inscripciones
+		authorized.POST("/inscripciones", controllers.CreateEnrollment)
+		authorized.GET("/mis-inscripciones/:userID", controllers.GetUserEnrollments)
+		authorized.DELETE("/inscripciones/:id", controllers.CancelEnrollment)
+
+		// Rutas de administrador
+		admin := authorized.Group("/admin")
+		admin.Use( /* middleware de verificación de rol admin */ )
+		{
+			admin.POST("/actividades", controllers.CreateActivity)
+			admin.PUT("/actividades/:id", controllers.UpdateActivity)
+			admin.DELETE("/actividades/:id", controllers.DeleteActivity)
+		}
+	}
 
 	// Iniciar el servidor
 	if err := r.Run(":8080"); err != nil {

@@ -8,11 +8,15 @@ type Activity struct {
 	gorm.Model
 	Title       string `gorm:"not null" json:"title"`
 	Description string `json:"description"`
-	Schedule    string `gorm:"not null" json:"schedule"` // Formato: "YYYY-MM-DD HH:mm"
+	Instructor  string `gorm:"not null" json:"instructor"`
+	Duration    int    `gorm:"not null" json:"duration"` // duración en minutos
+	Image       string `json:"image"`
+	Status      string `gorm:"not null" json:"status"` // "active" o "inactive"
+	DayOfWeek   string `gorm:"not null" json:"day_of_week"`
+	StartTime   string `gorm:"not null" json:"start_time"` // formato "HH:mm"
+	EndTime     string `gorm:"not null" json:"end_time"`   // formato "HH:mm"
 	Capacity    int    `gorm:"not null" json:"capacity"`
 	Category    string `gorm:"not null" json:"category"`
-	Instructor  string `gorm:"not null" json:"instructor"`
-	ImageURL    string `json:"image_url"`
 }
 
 // TableName especifica el nombre de la tabla en la base de datos

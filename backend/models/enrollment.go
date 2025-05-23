@@ -10,6 +10,7 @@ type Enrollment struct {
 	ActivityID uint     `gorm:"not null" json:"activity_id"`
 	User       User     `gorm:"foreignKey:UserID" json:"user"`
 	Activity   Activity `gorm:"foreignKey:ActivityID" json:"activity"`
+	Status     string   `gorm:"not null" json:"status"` // "active" o "cancelled"
 }
 
 // TableName especifica el nombre de la tabla en la base de datos
